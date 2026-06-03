@@ -13,11 +13,8 @@ COPY entrypoint.sh /app/entrypoint.sh
 # 4. Ensure the script has execution privileges
 RUN chmod +x /app/entrypoint.sh
 
-# 5. Fix ownership: Alpine uses 'apache:apache' instead of 'www-data:www-data'
-RUN chown -R apache:apache /app /htdocs
+# 5. Keep permissions clean on internal paths
+RUN chown -R apache:apache /app
 
-# 6. Revert back to the container's original default user configuration automatically
-USER apache
-
-# 7. Override the default execution loop
+# 6. Run the entrypoint script as root so it can modify the attached volume
 ENTRYPOINT ["/bin/sh", "/app/entrypoint.sh"]
