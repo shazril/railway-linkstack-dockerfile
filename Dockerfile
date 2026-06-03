@@ -20,4 +20,4 @@ RUN chown -R apache:apache /app /htdocs
 USER apache
 
 # 7. Override the default execution loop
-ENTRYPOINT ["/app/entrypoint.sh"]
+ENTRYPOINT ["/bin/sh", "/app/entrypoint.sh"]
