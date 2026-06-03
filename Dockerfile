@@ -1,6 +1,3 @@
-#!/bin/bash
-set -e
-
 # Define the source backup directory and the destination volume path
 SOURCE_DIR="/app/linkstack-source"
 TARGET_DIR="/htdocs"
