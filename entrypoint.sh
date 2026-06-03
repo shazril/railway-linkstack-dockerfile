@@ -22,4 +22,4 @@ fi
 
 echo "Handing control over to the main app container..."
 # 3. FIX: Point precisely to the image's original entrypoint script
-exec /docker-entrypoint.sh "$@"
+exec sh /docker-entrypoint.sh "$@"
