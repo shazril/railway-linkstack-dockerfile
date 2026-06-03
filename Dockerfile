@@ -1,18 +1,14 @@
-# Define the source backup directory and the destination volume path
-SOURCE_DIR="/app/linkstack-source"
-TARGET_DIR="/htdocs"
+FROM linkstackorg/linkstack:latest
 
-echo "Checking persistent volume status at $TARGET_DIR..."
+# Move the pre-baked application files to a backup source directory
+RUN mkdir -p /app/linkstack-source && \
+    cp -a /htdocs/. /app/linkstack-source/
 
-# If the target directory is empty (or missing critical files like index.php)
-if [ ! -f "$TARGET_DIR/index.php" ]; then
-    echo "Volume is empty or uninitialized. Copying core LinkStack application files..."
-    # Copy all files including hidden ones from our source backup to the volume
-    cp -a "$SOURCE_DIR/." "$TARGET_DIR/"
-    echo "File copy complete."
-else
-    echo "Persistent volume already initialized with LinkStack files. Skipping copy."
-fi
+# Copy our custom initialization script into the container
+COPY entrypoint.sh /app/entrypoint.sh
 
-# Hand execution back to LinkStack's original container entrypoint startup command
-exec /entrypoint.sh "$@"
+# Ensure the script has execution permissions
+RUN chmod +x /app/entrypoint.sh
+
+# Override the default entrypoint execution to run our check script first
+ENTRYPOINT ["/app/entrypoint.sh"]
