@@ -21,6 +21,5 @@ else
 fi
 
 echo "Handing control over to the main app container..."
-# 3. Call LinkStack's native entrypoint. The base script natively handles dropping 
-# permissions from root to apache when initializing its own internal components.
-exec /entrypoint.sh "$@"
+# 3. FIX: Point precisely to the image's original entrypoint script
+exec /docker-entrypoint.sh "$@"
