@@ -22,6 +22,10 @@ USER root
 # which our entrypoint needs to run `artisan` (migrate, key:generate). Install it.
 RUN apk add --no-cache php83
 
+# Fix mixed-content (http:// assets on an https page) behind Railway's TLS proxy.
+# Loaded after ssl.conf thanks to the zz- prefix; conf.d/*.conf is auto-included.
+COPY force-https.conf /etc/apache2/conf.d/zz-force-https.conf
+
 # Snapshot the application shipped inside the image. The entrypoint copies this
 # into the (initially empty) Railway volume on the first deploy only.
 RUN cp -a /htdocs /htdocs-seed
